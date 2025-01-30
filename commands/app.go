@@ -11,7 +11,10 @@ func AppCommand() *cobra.Command {
 		Short: "app commands",
 	}
 
-	cmd.AddCommand(app.CreateApp())
+	cmd.AddCommand(
+		app.CreateApp(),
+		app.EnableModuleCmd(),
+	)
 
 	return &cmd
 }
