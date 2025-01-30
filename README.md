@@ -41,7 +41,7 @@ liquor app create --name <APP_NAME> --pkg <PACKAGE_NAME>
 
 ## Modules
 
-- (database/mongodb)[sdk/modules/mongodb/README.md]
-- (database/mysql)[sdk/modules/mysql/README.md]
-- (database/postgres)[sdk/modules/postgres/README.md]
-- (database/sqlite)[sdk/modules/sqlite/README.md]
+- [database/mongodb](sdk/modules/database/mongodb/README.md)
+- [database/mysql](sdk/modules/database/mysql/README.md)
+- [database/postgres](sdk/modules/database/postgres/README.md)
+- [database/sqlite](sdk/modules/database/sqlite/README.md)
