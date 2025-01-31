@@ -1,6 +1,10 @@
 package commands
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/go-liquor/liquor/commands/app"
+	"github.com/go-liquor/liquor/commands/create"
+	"github.com/spf13/cobra"
+)
 
 var LiquorCmd = &cobra.Command{
 	Use:   "liquor",
@@ -9,7 +13,9 @@ var LiquorCmd = &cobra.Command{
 }
 
 func ExecuteLiquor() error {
-	LiquorCmd.AddCommand(AppCommand())
+	LiquorCmd.AddCommand(
+		app.AppCommand(),
+		create.CreateCommand())
 	if err := LiquorCmd.Execute(); err != nil {
 		return err
 	}

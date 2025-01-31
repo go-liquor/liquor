@@ -11,9 +11,10 @@ import (
 	"github.com/go-liquor/liquor/internal/message"
 	cp "github.com/otiai10/copy"
 	"github.com/spf13/cobra"
+	"golang.org/x/mod/modfile"
 )
 
-func CreateApp() *cobra.Command {
+func createApp() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "create",
 		Short: "Create a new app",
@@ -60,7 +61,19 @@ func createAppRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	mod, err := commons.GetModFile(name)
+	if err != nil {
+		return err
+	}
+	mod.Replace = []*modfile.Replace{}
+	mod.DropRequire("github.com/go-liquor/liquor")
+	mod.AddRequire("github.com/go-liquor/liquor", constants.Version)
+	content, err := mod.Format()
+	if err != nil {
+		return err
+	}
+	os.WriteFile(path.Join(name, "go.mod"), content, 0755)
+	commons.Command(name, "go", "mod", "tidy")
 	message.Success("finish")
-
 	return nil
 }

@@ -7,6 +7,6 @@ import (
 
 func main() {
 	if err := commands.ExecuteLiquor(); err != nil {
-		message.Fatal("failed to execute liquor: %v", err)
+		message.Fatal("😭 failed to execute liquor: %v", err)
 	}
 }

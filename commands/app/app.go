@@ -1,7 +1,6 @@
-package commands
+package app
 
 import (
-	"github.com/go-liquor/liquor/commands/app"
 	"github.com/spf13/cobra"
 )
 
@@ -12,8 +11,8 @@ func AppCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		app.CreateApp(),
-		app.EnableModuleCmd(),
+		createApp(),
+		enableModuleCmd(),
 	)
 
 	return &cmd

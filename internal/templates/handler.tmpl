@@ -1,0 +1,43 @@
+package handlers
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type {{.PascalCaseName}}Handler struct {
+}
+
+func New{{.PascalCaseName}}Handler() *{{.PascalCaseName}}Handler {
+	return &{{.PascalCaseName}}Handler{
+	}
+}
+
+{{- if .CRUD }}
+func (i *{{.PascalCaseName}}Handler) List(c *gin.Context) {
+	c.Status(http.StatusOK)
+}
+
+func (i *{{.PascalCaseName}}Handler) Create(c *gin.Context) {
+	c.Status(http.StatusOK)
+}
+
+func (i *{{.PascalCaseName}}Handler) Get(c *gin.Context) {
+	c.Status(http.StatusOK)
+}
+
+func (i *{{.PascalCaseName}}Handler) Update(c *gin.Context) {
+	c.Status(http.StatusOK)
+}
+
+func (i *{{.PascalCaseName}}Handler) Delete(c *gin.Context) {
+	c.Status(http.StatusOK)
+}
+{{- else }}
+func (i *{{.PascalCaseName}}Handler) Example(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "this is an example",
+	})
+}
+{{- end }}

@@ -25,7 +25,7 @@ func Success(format string, a ...any) {
 
 // Info print message info
 func Info(format string, a ...any) {
-	fmt.Println(aurora.Blue(fmt.Sprintf(format, a...)))
+	fmt.Println(aurora.Bold(aurora.Blue(fmt.Sprintf(format, a...))))
 }
 
 // Warning print message warning

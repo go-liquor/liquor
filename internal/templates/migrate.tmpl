@@ -1,0 +1,18 @@
+package migrations
+
+
+import (
+    {{- if eq .DatabaseDriver "mongodb" }}
+    "go.mongodb.org/mongo-driver/v2/mongo"
+    {{- else }}
+    "github.com/uptrace/bun"
+    {{- end }}
+)
+
+{{- if eq .DatabaseDriver "mongodb" }}
+func {{.CamelCaseName}}Migrate(db *mongo.Database) {
+{{- else }}
+func {{.CamelCaseName}}Migrate(db *bun.DB) {
+{{- end }}
+
+}

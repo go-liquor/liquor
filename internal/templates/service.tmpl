@@ -1,0 +1,16 @@
+package services
+
+import (
+
+        "go.uber.org/zap"
+)
+
+type {{.PascalCaseName}}Service struct {
+        logger *zap.Logger
+}
+
+func New{{.PascalCaseName}}Service(logger *zap.Logger) *{{.PascalCaseName}}Service {
+        return &{{.PascalCaseName}}Service{
+                logger: logger,
+        }
+}

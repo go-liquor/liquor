@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-liquor/liquor/internal/message"
+	"golang.org/x/mod/modfile"
 )
 
 // ReplacePackage read firstDir and replace package
@@ -40,4 +41,14 @@ func ReplacePackage(firstDir string, originalPackage string, newPackage string) 
 		}
 	}
 	return nil
+}
+
+// GetModFile read the mod file
+func GetModFile(origin string) (*modfile.File, error) {
+	content, err := os.ReadFile(path.Join(origin, "go.mod"))
+	if err != nil {
+		return nil, err
+	}
+	modFile, err := modfile.Parse("go.mod", content, nil)
+	return modFile, err
 }
