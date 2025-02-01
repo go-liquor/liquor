@@ -23,3 +23,10 @@ func RegisterService(services ...interface{}) fx.Option {
 		services...,
 	))
 }
+
+// RegisterRepositories register you repositories
+func RegisterRepositories(repos ...interface{}) fx.Option {
+	return fx.Module("liquor-app-repositories", fx.Provide(
+		repos...,
+	))
+}

@@ -45,3 +45,7 @@ liquor app create --name <APP_NAME> --pkg <PACKAGE_NAME>
 - [database/mysql](sdk/modules/database/mysql/README.md)
 - [database/postgres](sdk/modules/database/postgres/README.md)
 - [database/sqlite](sdk/modules/database/sqlite/README.md)
+
+## Docs
+
+https://go-liquor.github.io

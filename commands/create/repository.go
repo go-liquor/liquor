@@ -79,5 +79,11 @@ func createRepositoryRun(cmd *cobra.Command, args []string) error {
 	message.Success("created %v", outputFileRepo)
 	message.Success("created %v", outputFilePort)
 
+	if err := commons.ReplaceAnnotations("cmd/app/main.go",
+		"//go:liquor:repositories",
+		fmt.Sprintf("\trepository.New%vRepository,", textcase.PascalCase(name))); err != nil {
+		return err
+	}
+
 	return nil
 }
