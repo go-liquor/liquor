@@ -1,0 +1,52 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  build:
+    name: Build Go Binaries
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Go configure
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Version name
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build
+        run: |
+          mkdir -p dist
+          for OS in darwin linux windows; do
+            for ARCH in amd64 arm64; do
+              if [ "$OS" = "windows" ] && [ "$ARCH" = "arm64" ]; then
+                continue
+              fi
+              OUTPUT="dist/liquor-${{ env.VERSION }}-${OS}-${ARCH}"
+              if [ "$OS" = "windows" ]; then
+                OUTPUT="${OUTPUT}.exe"
+              fi
+              GOOS=$OS GOARCH=$ARCH go build -ldflags="-s -w" -o $OUTPUT ./cmd/app/main.go
+            done
+          done
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
+          body: "${{ env.VERSION }}"
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
