@@ -37,7 +37,7 @@ jobs:
               if [ "$OS" = "windows" ]; then
                 OUTPUT="${OUTPUT}.exe"
               fi
-              GOOS=$OS GOARCH=$ARCH go build -ldflags="-s -w" -o $OUTPUT ./cmd/app/main.go
+              GOOS=$OS GOARCH=$ARCH go build -ldflags="-s -w" -o $OUTPUT main.go
             done
           done
 
