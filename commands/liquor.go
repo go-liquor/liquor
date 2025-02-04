@@ -7,6 +7,7 @@ import (
 	"github.com/go-liquor/liquor/commands/app"
 	"github.com/go-liquor/liquor/commands/create"
 	"github.com/go-liquor/liquor/internal/constants"
+	"github.com/logrusorgru/aurora/v4"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +18,7 @@ var LiquorCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		version, _ := cmd.Flags().GetBool("version")
 		if version {
-			fmt.Println(constants.Version)
+			fmt.Printf("😍 CLI Version: %v\n🚀 SDK Version: %v\n", aurora.Cyan(constants.CliVersion), aurora.Cyan(constants.SdkVersion))
 			os.Exit(0)
 		}
 	},

@@ -22,7 +22,7 @@ func enableModuleRun(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("you need specify a module")
 	}
 	for _, module := range args {
-		if err := commons.Command(".", "go", "get", "github.com/go-liquor/liquor/sdk/modules/"+module); err != nil {
+		if err := commons.Command(".", "go", "get", "github.com/go-liquor/liquor-sdk/modules/"+module); err != nil {
 			return err
 		}
 	}

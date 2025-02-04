@@ -11,7 +11,6 @@ import (
 	"github.com/go-liquor/liquor/internal/message"
 	cp "github.com/otiai10/copy"
 	"github.com/spf13/cobra"
-	"golang.org/x/mod/modfile"
 )
 
 func createApp() *cobra.Command {
@@ -41,7 +40,7 @@ func createAppRun(cmd *cobra.Command, args []string) error {
 	}
 	liquorHomeDir := path.Join(home, ".liquor")
 	frameworkDir := path.Join(liquorHomeDir, "framework")
-	if _, err := os.Stat(liquorHomeDir); os.IsNotExist(err) {
+	if _, err := os.Stat(frameworkDir); os.IsNotExist(err) {
 		os.MkdirAll(liquorHomeDir, 0755)
 		if _, err := git.PlainClone(frameworkDir, false, &git.CloneOptions{
 			URL:      constants.FrameworkRepo,
@@ -63,16 +62,19 @@ func createAppRun(cmd *cobra.Command, args []string) error {
 
 	mod, err := commons.GetModFile(name)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to get mod file: %v", err)
 	}
-	mod.Replace = []*modfile.Replace{}
-	mod.DropRequire("github.com/go-liquor/liquor")
-	mod.AddRequire("github.com/go-liquor/liquor", constants.Version)
+
+	mod.DropRequire("github.com/go-liquor/liquor-sdk")
+	mod.AddRequire("github.com/go-liquor/liquor-sdk", constants.SdkVersion)
+	mod.DropReplace("github.com/go-liquor/liquor-sdk", "")
 	content, err := mod.Format()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed in format mod file: %v", err)
 	}
-	os.WriteFile(path.Join(name, "go.mod"), content, 0755)
+	if err := os.WriteFile(path.Join(name, "go.mod"), content, 0755); err != nil {
+		return fmt.Errorf("failed to recreate go.mod: %v", err)
+	}
 	commons.Command(name, "go", "mod", "tidy")
 	message.Success("finish")
 	return nil
