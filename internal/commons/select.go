@@ -18,7 +18,6 @@ var (
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
 	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
 	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
-	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
 )
 
 type item string
@@ -90,6 +89,22 @@ func (m model) View() string {
 	return "\n" + m.list.View()
 }
 
+// NewList creates and displays an interactive terminal-based list selection menu.
+// It uses the Bubble Tea framework to create a TUI (Terminal User Interface)
+// that allows users to select an option from the provided list.
+//
+// Parameters:
+//   - title: The title displayed at the top of the selection list
+//   - options: A slice of strings representing the available options to choose from
+//
+// Returns:
+//   - string: The selected option from the list
+//
+// The function creates a styled list with the following features:
+//   - Arrow key navigation
+//   - Enter key to confirm selection
+//   - Custom styling for selected and unselected items
+//   - No filtering or status bar
 func NewList(title string, options []string) string {
 	items := []list.Item{}
 

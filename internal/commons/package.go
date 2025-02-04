@@ -9,7 +9,17 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-// ReplacePackage read firstDir and replace package
+// ReplacePackage recursively traverses through directories starting from firstDir
+// and replaces all occurrences of originalPackage with newPackage in all files.
+// It updates the package declarations and import paths in Go files.
+//
+// Parameters:
+//   - firstDir: The starting directory path for the recursive search
+//   - originalPackage: The package name/path to be replaced
+//   - newPackage: The new package name/path to replace with
+//
+// Returns:
+//   - error: nil if successful, otherwise returns an error if directory reading fails
 func ReplacePackage(firstDir string, originalPackage string, newPackage string) error {
 	paths := []string{
 		firstDir,
@@ -43,7 +53,15 @@ func ReplacePackage(firstDir string, originalPackage string, newPackage string) 
 	return nil
 }
 
-// GetModFile read the mod file
+// GetModFile reads and parses the go.mod file from the specified directory.
+// It returns the parsed module file that contains information about the Go module.
+//
+// Parameters:
+//   - origin: The directory path containing the go.mod file
+//
+// Returns:
+//   - *modfile.File: Parsed module file structure
+//   - error: nil if successful, otherwise returns an error if reading or parsing fails
 func GetModFile(origin string) (*modfile.File, error) {
 	content, err := os.ReadFile(path.Join(origin, "go.mod"))
 	if err != nil {

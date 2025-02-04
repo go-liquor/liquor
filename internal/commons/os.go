@@ -2,13 +2,25 @@ package commons
 
 import "os"
 
-// IsNotExist return true if path or file not exists
+// IsNotExist checks if a file or directory does not exist at the specified path.
+//
+// Parameters:
+//   - p: The path to check
+//
+// Returns:
+//   - bool: true if the path does not exist, false otherwise
 func IsNotExist(p string) bool {
 	_, err := os.Stat(p)
 	return os.IsNotExist(err)
 }
 
-// IsExists return true if path or file exists
+// IsExist checks if a file or directory exists at the specified path.
+//
+// Parameters:
+//   - p: The path to check
+//
+// Returns:
+//   - bool: true if the path exists, false otherwise
 func IsExist(p string) bool {
 	_, err := os.Stat(p)
 	return err == nil
