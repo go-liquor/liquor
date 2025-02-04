@@ -24,11 +24,16 @@ var LiquorCmd = &cobra.Command{
 	},
 }
 
-func ExecuteLiquor() error {
+func init() {
 	LiquorCmd.Flags().Bool("version", false, "Show version")
 	LiquorCmd.AddCommand(
-		app.AppCommand(),
-		create.CreateCommand())
+		app.AppCommand,
+		create.CreateCmd,
+	)
+}
+
+func ExecuteLiquor() error {
+
 	if err := LiquorCmd.Execute(); err != nil {
 		return err
 	}

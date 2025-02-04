@@ -2,7 +2,6 @@ package create
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"strings"
 
@@ -13,42 +12,34 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func createServiceCmd() *cobra.Command {
-	cmd := cobra.Command{
-		Use:   "service",
-		Short: "Create a new service (internal/app/services)",
-		RunE:  createServiceRun,
-	}
-	cmd.Flags().StringP("name", "n", "", "Service name")
-	cmd.MarkFlagRequired("name")
-	return &cmd
-}
+var createServiceCmd = &cobra.Command{
+	Use:   "service",
+	Short: "Create a new service (internal/app/services)",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		var name, _ = cmd.Flags().GetString("name")
 
-func createServiceRun(cmd *cobra.Command, args []string) error {
-	var name, _ = cmd.Flags().GetString("name")
+		name = strings.ReplaceAll(name, "service", "")
+		name = strings.ReplaceAll(name, "Service", "")
 
-	name = strings.ReplaceAll(name, "service", "")
-	name = strings.ReplaceAll(name, "Service", "")
+		if name == "" {
+			return fmt.Errorf("the name %v can't have 'Service' in name. We already put", name)
+		}
 
-	if name == "" {
-		return fmt.Errorf("the name %v can't have 'Service' in name. We already put", name)
-	}
+		var filename string = commons.ToFilename(name)
+		var outputFile string = path.Join("internal/app/services", filename)
 
-	var filename string = textcase.SnakeCase(name) + ".go"
-	var outputFile string = path.Join("internal/app/services", filename)
+		if commons.IsExist(outputFile) {
+			return fmt.Errorf("file %v already exists", outputFile)
+		}
 
-	if _, err := os.Stat(outputFile); err == nil {
-		return fmt.Errorf("file %v already exists", outputFile)
-	}
-
-	if err := templates.ParseTemplate(templates.Service, outputFile, map[string]string{
-		"PascalCaseName": textcase.PascalCase(name),
-	}); err != nil {
-		return err
-	}
-	message.Success("created %v", outputFile)
-	fmt.Println("You need register service in cmd/app/main.go:")
-	commons.PrintCode(fmt.Sprintf(`
+		if err := templates.ParseTemplate(templates.Service, outputFile, map[string]string{
+			"PascalCaseName": textcase.PascalCase(name),
+		}); err != nil {
+			return err
+		}
+		message.Success("created %v", outputFile)
+		fmt.Println("You need register service in cmd/app/main.go:")
+		commons.PrintCode(fmt.Sprintf(`
 func main() {
 	app.NewApp(
 		http.Server,
@@ -60,5 +51,11 @@ func main() {
 	)
 }
 	`, textcase.PascalCase(name)))
-	return nil
+		return nil
+	},
+}
+
+func init() {
+	createServiceCmd.Flags().StringP("name", "n", "", "Service name")
+	createServiceCmd.MarkFlagRequired("name")
 }

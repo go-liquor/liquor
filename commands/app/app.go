@@ -4,16 +4,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func AppCommand() *cobra.Command {
-	cmd := cobra.Command{
-		Use:   "app",
-		Short: "app commands",
-	}
+var AppCommand = &cobra.Command{
+	Use:   "app",
+	Short: "app commands",
+}
 
-	cmd.AddCommand(
-		createApp(),
-		enableModuleCmd(),
+func init() {
+	AppCommand.AddCommand(
+		createApp,
+		enableModuleCmd,
 	)
 
-	return &cmd
 }

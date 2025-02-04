@@ -21,3 +21,6 @@ var RepositoryPorts string
 
 //go:embed migrate.tmpl
 var Migrate string
+
+//go:embed entity.tmpl
+var Entity string
