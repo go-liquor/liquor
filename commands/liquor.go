@@ -29,6 +29,7 @@ func init() {
 	LiquorCmd.AddCommand(
 		app.AppCommand,
 		create.CreateCmd,
+		runCmd,
 	)
 }
 
