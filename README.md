@@ -14,6 +14,7 @@ Liquor is a web development framework built with Golang, designed to simplify th
     - [Create a new route group](#create-a-new-route-group)
     - [Create a new entity](#create-a-new-entity)
     - [Create a new service](#create-a-new-service)
+- [GoDoc](https://pkg.go.dev/github.com/go-liquor/liquor)
 
 
 ## Install CLI
