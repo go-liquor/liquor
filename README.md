@@ -33,7 +33,7 @@ liquor app create --name <APP_NAME> --pkg <PACKAGE_NAME>
 ### Run application
 
 ```bash
-go run cmd/app/main.go
+liquor run
 ```
 
 ### Enable module
