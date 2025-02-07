@@ -4,15 +4,29 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	{{ if .ByResource -}}
+	"{{.Package}}/internal/app/services"
+	{{ end }}
 )
 
 type {{.PascalCaseName}}Handler struct {
+	{{ if .ByResource -}}
+	svc *services.{{.PascalCaseName}}Service
+	{{ end }}
 }
 
+{{ if .ByResource -}}
+func New{{.PascalCaseName}}Handler(svc *services.{{.PascalCaseName}}Service) *{{.PascalCaseName}}Handler {
+	return &{{.PascalCaseName}}Handler{
+		svc: svc,
+	}
+}
+{{ else -}}
 func New{{.PascalCaseName}}Handler() *{{.PascalCaseName}}Handler {
 	return &{{.PascalCaseName}}Handler{
 	}
 }
+{{ end -}}
 
 {{- if .CRUD }}
 func (i *{{.PascalCaseName}}Handler) List(c *gin.Context) {

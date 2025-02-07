@@ -14,5 +14,6 @@ func init() {
 		createRepositoryCmd,
 		createRouteCmd,
 		createServiceCmd,
+		createResourceCmd,
 	)
 }

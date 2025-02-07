@@ -17,29 +17,40 @@ var createServiceCmd = &cobra.Command{
 	Short: "Create a new service (internal/app/services)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var name, _ = cmd.Flags().GetString("name")
+		return createServiceRun(name, false)
+	},
+}
 
-		name = strings.ReplaceAll(name, "service", "")
-		name = strings.ReplaceAll(name, "Service", "")
+func createServiceRun(name string, byResource bool) error {
+	name = strings.ReplaceAll(name, "service", "")
+	name = strings.ReplaceAll(name, "Service", "")
 
-		if name == "" {
-			return fmt.Errorf("the name %v can't have 'Service' in name. We already put", name)
-		}
+	if name == "" {
+		return fmt.Errorf("the name %v can't have 'Service' in name. We already put", name)
+	}
 
-		var filename string = commons.ToFilename(name)
-		var outputFile string = path.Join("internal/app/services", filename)
+	modFile, err := commons.GetModFile(".")
+	if err != nil {
+		return err
+	}
 
-		if commons.IsExist(outputFile) {
-			return fmt.Errorf("file %v already exists", outputFile)
-		}
+	var filename string = commons.ToFilename(name)
+	var outputFile string = path.Join("internal/app/services", filename)
 
-		if err := templates.ParseTemplate(templates.Service, outputFile, map[string]string{
-			"PascalCaseName": textcase.PascalCase(name),
-		}); err != nil {
-			return err
-		}
-		message.Success("created %v", outputFile)
-		fmt.Println("You need register service in cmd/app/main.go:")
-		commons.PrintCode(fmt.Sprintf(`
+	if commons.IsExist(outputFile) {
+		return fmt.Errorf("file %v already exists", outputFile)
+	}
+
+	if err := templates.ParseTemplate(templates.Service, outputFile, map[string]any{
+		"PascalCaseName": textcase.PascalCase(name),
+		"ByResource":     byResource,
+		"Package":        modFile.Module.Mod.Path,
+	}); err != nil {
+		return err
+	}
+	message.Success("created %v", outputFile)
+	fmt.Println("You need register service in cmd/app/main.go:")
+	commons.PrintCode(fmt.Sprintf(`
 func main() {
 	app.NewApp(
 		http.Server,
@@ -51,8 +62,7 @@ func main() {
 	)
 }
 	`, textcase.PascalCase(name)))
-		return nil
-	},
+	return nil
 }
 
 func init() {

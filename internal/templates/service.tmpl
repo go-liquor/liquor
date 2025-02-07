@@ -3,14 +3,29 @@ package services
 import (
 
         "go.uber.org/zap"
+        {{ if .ByResource -}}
+	"{{.Package}}/internal/app/ports"
+	{{ end }}
 )
 
 type {{.PascalCaseName}}Service struct {
         logger *zap.Logger
+        {{ if .ByResource -}}
+	repo ports.{{.PascalCaseName}}Repository
+	{{ end }}
 }
 
+{{ if .ByResource -}}
+func New{{.PascalCaseName}}Service(logger *zap.Logger, repo ports.{{.PascalCaseName}}Repository) *{{.PascalCaseName}}Service {
+        return &{{.PascalCaseName}}Service{
+                logger: logger,
+                repo: repo,
+        }
+}
+{{ else -}}
 func New{{.PascalCaseName}}Service(logger *zap.Logger) *{{.PascalCaseName}}Service {
         return &{{.PascalCaseName}}Service{
                 logger: logger,
         }
 }
+{{ end -}}

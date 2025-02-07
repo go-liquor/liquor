@@ -17,29 +17,33 @@ var createEntityCmd = &cobra.Command{
 	Short: "Create a new entity",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var name, _ = cmd.Flags().GetString("name")
-
-		var filename string = commons.ToFilename(name)
-		var entityPath string = "internal/domain/entity"
-
-		if commons.IsNotExist(entityPath) {
-			os.MkdirAll(entityPath, 0755)
-		}
-
-		var outputFile string = path.Join(entityPath, filename)
-
-		if commons.IsExist(outputFile) {
-			return fmt.Errorf("file %v already exists", outputFile)
-		}
-
-		if err := templates.ParseTemplate(templates.Entity, outputFile, map[string]string{
-			"PascalCaseName": textcase.PascalCase(name),
-		}); err != nil {
-			return err
-		}
-		message.Success("created %v", outputFile)
-
-		return nil
+		return createEntityRun(name)
 	},
+}
+
+func createEntityRun(name string) error {
+
+	var filename string = commons.ToFilename(name)
+	var entityPath string = "internal/domain/entity"
+
+	if commons.IsNotExist(entityPath) {
+		os.MkdirAll(entityPath, 0755)
+	}
+
+	var outputFile string = path.Join(entityPath, filename)
+
+	if commons.IsExist(outputFile) {
+		return fmt.Errorf("file %v already exists", outputFile)
+	}
+
+	if err := templates.ParseTemplate(templates.Entity, outputFile, map[string]string{
+		"PascalCaseName": textcase.PascalCase(name),
+	}); err != nil {
+		return err
+	}
+	message.Success("created %v", outputFile)
+
+	return nil
 }
 
 func init() {

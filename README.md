@@ -67,3 +67,11 @@ liquor create service --name <SERVICE_NAME>
 ```bash
 liquor create repository --name <REPOSITORY_NAME>
 ```
+
+### Create a resource
+
+Create a new route group, service, entity and repository at once
+
+```bash
+liquor create resource --name <RESOURCE_NAME>
+```
