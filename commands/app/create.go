@@ -1,6 +1,7 @@
 package app
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -38,6 +39,27 @@ var createApp = &cobra.Command{
 			}); err != nil {
 				return err
 			}
+		} else {
+			var msg error
+			repo, err := git.PlainOpen(frameworkDir)
+			if err != nil {
+				msg = fmt.Errorf("failed to plain open %v: %v", frameworkDir, err)
+			} else {
+				w, err := repo.Worktree()
+				if err != nil {
+					msg = fmt.Errorf("failed to get worktree: %v", err)
+				} else {
+					if err := w.Pull(&git.PullOptions{RemoteName: "origin"}); err != nil {
+						if !errors.Is(err, git.NoErrAlreadyUpToDate) {
+							msg = fmt.Errorf("failed to pull: %v", err)
+						}
+					}
+				}
+			}
+
+			if msg != nil {
+				message.Warning("we cant pull latest version of framework, you can try rm -rf $HOME/.liquor/framework: %v", msg.Error())
+			}
 		}
 
 		if err := cp.Copy(frameworkDir, name); err != nil {
@@ -56,7 +78,7 @@ var createApp = &cobra.Command{
 		}
 
 		mod.DropRequire("github.com/go-liquor/liquor-sdk")
-		mod.AddRequire("github.com/go-liquor/liquor-sdk", constants.SdkVersion)
+		mod.AddRequire("github.com/go-liquor/liquor-sdk", "latest")
 		mod.DropReplace("github.com/go-liquor/liquor-sdk", "")
 		content, err := mod.Format()
 		if err != nil {

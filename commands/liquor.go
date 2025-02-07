@@ -18,7 +18,7 @@ var LiquorCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		version, _ := cmd.Flags().GetBool("version")
 		if version {
-			fmt.Printf("😍 CLI Version: %v\n🚀 SDK Version: %v\n", aurora.Cyan(constants.CliVersion), aurora.Cyan(constants.SdkVersion))
+			fmt.Printf("🚀 CLI Version: %v\n", aurora.Cyan(constants.CliVersion))
 			os.Exit(0)
 		}
 	},
