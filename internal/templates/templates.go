@@ -24,3 +24,9 @@ var Migrate string
 
 //go:embed entity.tmpl
 var Entity string
+
+//go:embed grpc_proto.tmpl
+var GrpcProto string
+
+//go:embed grpc_server.tmpl
+var GrpcServer string
