@@ -1,0 +1,11 @@
+package rest
+
+
+import (
+    "github.com/go-liquor/liquor-sdk/server/http"
+)
+
+var Module = http.NewRestModule("{{.ModuleName}}", 
+    New{{.PascalCaseName}}Handler, 
+    {{.PascalCaseName}}Routes,
+)

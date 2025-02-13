@@ -1,0 +1,12 @@
+package rest
+
+import (
+	"github.com/gin-gonic/gin"
+)
+
+func {{.PascalCaseName}}Routes(r *gin.Engine, handler *{{.PascalCaseName}}Handler) {
+	group := r.Group("{{.Group}}")
+	{
+        group.GET("/-/health")
+	}
+}

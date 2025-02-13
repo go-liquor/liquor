@@ -4,29 +4,38 @@ import (
 	_ "embed"
 )
 
-//go:embed service.tmpl
+//go:embed app/module_app.tmpl
+var ModuleApp string
+
+//go:embed service/service.tmpl
 var Service string
 
-//go:embed route.tmpl
+//go:embed rest/route.tmpl
 var Route string
 
-//go:embed handler.tmpl
+//go:embed rest/rest_module.tmpl
+var RestModule string
+
+//go:embed rest/handler.tmpl
 var Handler string
 
-//go:embed repository.tmpl
+//go:embed database/repository.tmpl
 var Repository string
 
-//go:embed ports_repository.tmpl
+//go:embed database/ports_repository.tmpl
 var RepositoryPorts string
 
-//go:embed migrate.tmpl
+//go:embed database/migrate.tmpl
 var Migrate string
 
-//go:embed entity.tmpl
+//go:embed database/module.tmpl
+var DatabaseModule string
+
+//go:embed entity/entity.tmpl
 var Entity string
 
-//go:embed grpc_proto.tmpl
+//go:embed grpc/grpc_proto.tmpl
 var GrpcProto string
 
-//go:embed grpc_server.tmpl
+//go:embed grpc/grpc_server.tmpl
 var GrpcServer string

@@ -1,0 +1,15 @@
+package database
+
+import (
+    "go.uber.org/fx"
+    "{{.Package}}/app/{{.ModuleName}}/adapters/database/repositories"
+    "{{.Package}}/app/{{.ModuleName}}/adapters/database/migrations"
+)
+
+var Module = fx.Module("database-{{.ModuleName}}",
+    fx.Provide(
+        repositories.New{{.PascalCaseName}}Repository,
+    ),
+    fx.Invoke(
+        migrations.{{.PascalCaseName}}Migrate,
+    ))

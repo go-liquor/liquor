@@ -10,9 +10,9 @@ import (
 )
 
 {{- if eq .DatabaseDriver "mongodb" }}
-func {{.CamelCaseName}}Migrate(db *mongo.Database) {
+func {{.PascalCaseName}}Migrate(db *mongo.Database) {
 {{- else }}
-func {{.CamelCaseName}}Migrate(db *bun.DB) {
+func {{.PascalCaseName}}Migrate(db *bun.DB) {
 {{- end }}
 
 }

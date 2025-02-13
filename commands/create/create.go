@@ -9,12 +9,6 @@ var CreateCmd = &cobra.Command{
 
 func init() {
 	CreateCmd.AddCommand(
-		createEntityCmd,
-		createMigrateCmd,
-		createRepositoryCmd,
-		createRouteCmd,
-		createServiceCmd,
-		createResourceCmd,
-		createGrpcService,
+		createModuleCmd,
 	)
 }

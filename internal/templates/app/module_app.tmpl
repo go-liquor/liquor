@@ -1,0 +1,17 @@
+package {{.ModuleName}}
+
+import (
+    "{{.Package}}/app/{{.ModuleName}}/adapters/database"
+    "{{.Package}}/app/{{.ModuleName}}/adapters/server/rest"
+    "{{.Package}}/app/{{.ModuleName}}/services"
+
+    "github.com/go-liquor/liquor-sdk/app"
+)
+
+var Module  = app.NewModule("{{.ModuleName}}",
+    rest.Module,
+    database.Module,
+    app.RegisterServices(
+        services.New{{.PascalCaseName}}Service,
+    ),
+)
