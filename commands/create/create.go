@@ -9,6 +9,6 @@ var CreateCmd = &cobra.Command{
 
 func init() {
 	CreateCmd.AddCommand(
-		createModuleCmd,
+		createResourceCmd,
 	)
 }

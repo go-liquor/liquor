@@ -7,6 +7,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.2.4
 	github.com/charmbracelet/glamour v0.8.0
 	github.com/charmbracelet/lipgloss v1.0.0
+	github.com/gertd/go-pluralize v0.2.1
 	github.com/go-git/go-git/v5 v5.13.2
 	github.com/golang-cz/textcase v1.2.1
 	github.com/logrusorgru/aurora/v4 v4.0.0

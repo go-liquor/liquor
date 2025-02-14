@@ -6,6 +6,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/go-liquor/liquor/internal/commons"
 	"github.com/go-liquor/liquor/internal/message"
 	"github.com/go-liquor/liquor/internal/project"
@@ -14,17 +15,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var createModuleCmd = &cobra.Command{
-	Use:   "module",
-	Short: "Create module in app/<module-name>",
+var createResourceCmd = &cobra.Command{
+	Use:   "resource",
+	Short: "Create resource in app/<resource>",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var name, _ = cmd.Flags().GetString("name")
-		return createModuleRun(name, "")
+		var group, _ = cmd.Flags().GetString("group")
+		return createResourceRun(name, group)
 	},
 }
 
-func createModuleRun(name string, routeGroup string) error {
+func createResourceRun(name string, routeGroup string) error {
 	modulePath := path.Join("app", name)
+	pl := pluralize.NewClient()
 
 	restServerPath := path.Join(modulePath, "adapters/server/rest")
 	databasePath := path.Join(modulePath, "adapters/database")
@@ -98,7 +101,7 @@ func createModuleRun(name string, routeGroup string) error {
 
 	if err := templates.ParseTemplates(files, map[string]string{
 		"ModuleName":     strings.ToLower(name),
-		"PascalCaseName": textcase.PascalCase(name),
+		"PascalCaseName": textcase.PascalCase(pl.Singular(name)),
 		"Package":        modFile.Module.Mod.Path,
 		"DatabaseDriver": proj.DatabaseDriver,
 		"Group":          routeGroup,
@@ -127,6 +130,7 @@ func main() {
 }
 
 func init() {
-	createModuleCmd.Flags().StringP("name", "n", "", "module name")
-	createModuleCmd.MarkFlagRequired("name")
+	createResourceCmd.Flags().StringP("name", "n", "", "module name")
+	createResourceCmd.Flags().StringP("group", "g", "", "Route group path (default: /:name/)")
+	createResourceCmd.MarkFlagRequired("name")
 }
