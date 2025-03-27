@@ -9,15 +9,14 @@ Liquor is a web development framework built with Golang, designed to simplify th
 - [Installation](#install-cli)
 - [Usage](#usage)
     - [Create a new app](#create-a-new-app)
-    - [Run application](#run-application)
-    - [Enable module](#enable-module)
-    - [Create a resource](#create-a-new-resource)
-
+    - [Create a new migration](#create-a-new-migration)
+    - [Create a new service](#create-a-new-service)
+    - [Create a new api](#create-a-new-api)
 
 ## Install CLI
 
 ```bash
-go install github.com/go-liquor/liquor@latest
+go install github.com/go-liquor/liquor/v2@latest
 ```
 
 ## Usage
@@ -25,26 +24,22 @@ go install github.com/go-liquor/liquor@latest
 ### Create a new app
 
 ```bash
-liquor app create --name <APP_NAME> --pkg <PACKAGE_NAME>
+liquor create app --name <APP_NAME> --pkg <PACKAGE_NAME>
 ```
 
-### Run application
-
+### Create a new migration
 ```bash
-liquor run
+liquor create migration --name <MIGRATION_NAME>
 ```
 
-### Enable module
+### Create a new service
 
 ```bash
-liquor app enable <MODULE_NAME>
+liquor create service --name <SERVICE_NAME>
 ```
 
-
-### Create a new resource
-
-Creates a new REST API resource with all necessary files including handlers, services, routes, repositories, entity, and migrations.
+### Create a new api
 
 ```bash
-liquor create resource --name <resourceName> --group /api/<GROUP_NAME>
+liquor create api --name <API_NAME>
 ```
