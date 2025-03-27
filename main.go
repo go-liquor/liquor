@@ -1,12 +1,16 @@
 package main
 
 import (
-	"github.com/go-liquor/liquor/commands"
-	"github.com/go-liquor/liquor/internal/message"
+	"fmt"
+	"os"
+
+	"github.com/go-liquor/liquor/v2/internal/commands"
+	"github.com/logrusorgru/aurora/v4"
 )
 
 func main() {
-	if err := commands.ExecuteLiquor(); err != nil {
-		message.Fatal("😭 failed to execute liquor: %v", err)
+	if err := commands.Execute(); err != nil {
+		fmt.Printf("🚫 %v\n", aurora.Red(err.Error()))
+		os.Exit(1)
 	}
 }
