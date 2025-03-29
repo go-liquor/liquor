@@ -3,6 +3,8 @@ package config
 const (
 	AppName              = "app.name"
 	AppDebug             = "app.debug"
+	GrpcPort             = "grpc.port"
+	RestDisabled         = "rest.disabled"
 	RestPort             = "rest.port"
 	CorsDefault          = "rest.cors.default"
 	CorsAllowOrigins     = "rest.cors.origins"

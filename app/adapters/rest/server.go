@@ -41,6 +41,9 @@ func instanceServer(cfg *config.Config) *gin.Engine {
 }
 
 func startServer(cfg *config.Config, server *gin.Engine, lg *zap.Logger, lc fx.Lifecycle) {
+	if cfg.GetBool(config.RestDisabled) {
+		return
+	}
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			lg.Info("starting HTTP server", zap.Int64("port", cfg.GetInt64(config.RestPort)))

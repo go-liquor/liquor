@@ -4,7 +4,10 @@ app:
 log:
   level: "debug"
   format: "json"
+grpc:
+ port: 50051
 rest:
+  # disabled: false # if you wants disable rest, you can put here as true
   port: 8080
   cors:
     default: true
