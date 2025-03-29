@@ -145,7 +145,7 @@ func New(options ...Option) {
 				l.Debug("Starting application " + cfg.GetString(config.AppName))
 			},
 			// registers rest apis
-			func(s *rest.Server, api []rest.Api) {
+			func(s *rest.Route, api []rest.Api) {
 				for _, a := range api {
 					a.Routes(s)
 				}

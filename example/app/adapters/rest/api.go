@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,9 +20,18 @@ func NewUsersApi(svc ports.UserService) rest.Api {
 	}
 }
 
-func (u *UsersApi) Routes(s *rest.Server) {
+func (u *UsersApi) Routes(s *rest.Route) {
 	s.Get("/", u.Get)
 	s.Post("/", u.Create)
+	gp := s.Group("/").Middleware(func(context *gin.Context) {
+		fmt.Println("chamouy aquio", context.FullPath())
+		context.Next()
+	})
+	{
+		gp.Get("/tatu", func(request *rest.Request) {
+			request.Status(http.StatusOK)
+		})
+	}
 }
 
 func (u *UsersApi) Get(r *rest.Request) {
