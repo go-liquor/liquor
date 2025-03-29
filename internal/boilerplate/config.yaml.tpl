@@ -8,11 +8,7 @@ rest:
   port: 8080
   cors:
     default: true
-database:
-  driver: sqlite
-  sqlite:
-    dns: "file::memory:?cache=shared"
-  # origin:
+  # origins:
   #   - "*"
   # methods:
   #   - "GET"
@@ -25,3 +21,7 @@ database:
   #   - "Authorization"
   #   - "Content-Type"
   # credentials: true
+database:
+  driver: sqlite
+  sqlite:
+    dns: "file::memory:?cache=shared"
