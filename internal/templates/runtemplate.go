@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"os"
 
-	"github.com/go-liquor/liquor/internal/message"
+	"github.com/go-liquor/liquor/v2/internal/stdout"
 )
 
 // ParseTemplate processes a given template string and writes the output to a specified file.
@@ -72,7 +72,7 @@ func ParseTemplates(files map[string]string, data any) error {
 		if err := ParseTemplate(content, outputFile, data); err != nil {
 			return err
 		}
-		message.Success("created %s", outputFile)
+		stdout.Success("created %s", outputFile)
 	}
 	return nil
 }
