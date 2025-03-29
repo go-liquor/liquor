@@ -15,10 +15,8 @@ import (
 // It uses the uber-fx dependency injection framework to wire up the server components.
 //
 // Parameters:
-//   - T: Generic type for the service implementation
-//   - A: Generic type for the service instance
-//   - implementation: The service implementation to be registered
-//   - instance: The service instance to be provided
+//   - implementation: The grpc server implementation struct (e.g.: &adapters.MyGrpcHandler{})
+//   - instance: The function to return the grpc implementation (e.g.: adapters.NewGrpcHandler)
 //   - register: Function to register the implementation with the gRPC server
 //
 // Returns:

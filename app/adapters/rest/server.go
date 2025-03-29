@@ -13,30 +13,32 @@ import (
 
 func instanceServer(cfg *config.Config) *gin.Engine {
 	var svc *gin.Engine
-	if cfg.GetBool(config.AppDebug) {
+	if cfg.GetBool(config.AppDebug) && !cfg.GetBool(config.RestDisabled) {
 		gin.SetMode(gin.DebugMode)
 		svc = gin.Default()
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 		svc = gin.New()
 	}
-	crs := cors.Default()
-	if !cfg.GetBool(config.CorsDefault) {
-		corsConfig := cors.Config{
-			AllowMethods:     cfg.GetStringSlice(config.CorsAllowMethods),
-			AllowHeaders:     cfg.GetStringSlice(config.CorsAllowHeaders),
-			AllowCredentials: cfg.GetBool(config.CorsAllowCredentials),
-		}
+	if !cfg.GetBool(config.RestDisabled) {
+		crs := cors.Default()
+		if !cfg.GetBool(config.CorsDefault) {
+			corsConfig := cors.Config{
+				AllowMethods:     cfg.GetStringSlice(config.CorsAllowMethods),
+				AllowHeaders:     cfg.GetStringSlice(config.CorsAllowHeaders),
+				AllowCredentials: cfg.GetBool(config.CorsAllowCredentials),
+			}
 
-		if len(cfg.GetStringSlice(config.CorsAllowOrigins)) == 1 && cfg.GetStringSlice(config.CorsAllowOrigins)[0] == "*" {
-			corsConfig.AllowAllOrigins = true
-		} else {
-			corsConfig.AllowOrigins = cfg.GetStringSlice(config.CorsAllowOrigins)
-		}
+			if len(cfg.GetStringSlice(config.CorsAllowOrigins)) == 1 && cfg.GetStringSlice(config.CorsAllowOrigins)[0] == "*" {
+				corsConfig.AllowAllOrigins = true
+			} else {
+				corsConfig.AllowOrigins = cfg.GetStringSlice(config.CorsAllowOrigins)
+			}
 
-		crs = cors.New(corsConfig)
+			crs = cors.New(corsConfig)
+		}
+		svc.Use(crs)
 	}
-	svc.Use(crs)
 	return svc
 }
 
