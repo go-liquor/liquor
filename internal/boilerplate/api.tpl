@@ -26,7 +26,7 @@ func New{{.PascalCaseName}}Api() rest.Api {
 	}
 }
 
-func (u *{{.PascalCaseName}}Api) Routes(s *rest.Server) {
+func (u *{{.PascalCaseName}}Api) Routes(s *rest.Route) {
 	s.Get("/", u.Get)
 }
 
