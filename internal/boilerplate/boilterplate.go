@@ -39,3 +39,6 @@ var Repository string
 
 //go:embed migrate.tpl
 var Migrate string
+
+//go:embed ports.tpl
+var Ports string
