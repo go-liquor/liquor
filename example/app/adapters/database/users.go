@@ -3,9 +3,8 @@ package database
 import (
 	"context"
 
-	"github.com/go-liquor/liquor/v2/app/adapters/database"
-	"github.com/go-liquor/liquor/v2/example/app/entity"
-	"github.com/go-liquor/liquor/v2/example/app/ports"
+	"example/app/entity"
+	"example/app/ports"
 	"github.com/uptrace/bun"
 )
 
@@ -17,10 +16,6 @@ func NewUsersDatabase(db *bun.DB) ports.UserRepository {
 	return &UsersDatabase{
 		db: db,
 	}
-}
-
-func (u *UsersDatabase) CreateTable(p *database.Provider) {
-	p.CreateTableIfNotExists((*entity.User)(nil))
 }
 
 func (u *UsersDatabase) Create(ctx context.Context, user *entity.User) error {

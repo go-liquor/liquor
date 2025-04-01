@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"example/app/entity"
+	"example/app/ports"
 	"github.com/gin-gonic/gin"
 	"github.com/go-liquor/liquor/v2/app/adapters/rest"
-	"github.com/go-liquor/liquor/v2/example/app/entity"
-	"github.com/go-liquor/liquor/v2/example/app/ports"
 )
 
 type UsersApi struct {

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"example/app/adapters/database"
+	"example/app/adapters/rest"
+	"example/app/services"
+	"example/migrations"
 	"github.com/go-liquor/liquor/v2/app"
-	"github.com/go-liquor/liquor/v2/example/app/adapters/database"
-	"github.com/go-liquor/liquor/v2/example/app/adapters/rest"
-	"github.com/go-liquor/liquor/v2/example/app/services"
-	"github.com/go-liquor/liquor/v2/example/migrations"
 )
 
 func main() {

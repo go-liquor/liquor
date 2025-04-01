@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-liquor/liquor/v2/example/app/entity"
-	"github.com/go-liquor/liquor/v2/example/app/ports"
+	"example/app/entity"
+	"example/app/ports"
 	"go.uber.org/zap"
 )
 

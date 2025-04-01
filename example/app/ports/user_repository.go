@@ -3,7 +3,7 @@ package ports
 import (
 	"context"
 
-	"github.com/go-liquor/liquor/v2/example/app/entity"
+	"example/app/entity"
 )
 
 type UserRepository interface {

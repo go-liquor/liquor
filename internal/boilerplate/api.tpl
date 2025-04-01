@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-liquor/liquor/v2/app/adapters/rest"
 	{{- if .NewProject }}
-	"{{.Package}}/app/entity"
 	"{{.Package}}/app/ports"
 	{{- end }}
 )

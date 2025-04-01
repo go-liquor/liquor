@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-liquor/liquor/v2/example/app/entity"
+	"example/app/entity"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/migrate"
 )
