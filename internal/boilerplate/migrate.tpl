@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	{{- if .NewProject }}
-	"{{.Package}}/app/entity"
+	"{{.Package}}/app/domain/entity"
 	{{- end }}
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/migrate"

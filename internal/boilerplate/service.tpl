@@ -4,7 +4,7 @@ import (
 	"context"
 
 	{{- if .NewProject }}
-	"{{.Package}}/app/entity"
+	"{{.Package}}/app/domain/entity"
 	{{- end }}
 	"{{.Package}}/app/ports"
 	"go.uber.org/zap"

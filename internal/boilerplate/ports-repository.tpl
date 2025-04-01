@@ -3,7 +3,7 @@ package ports
 import (
 	"context"
 
-	"{{.Package}}/app/entity"
+	"{{.Package}}/app/domain/entity"
 )
 
 type {{.PascalCaseName}}Repository interface {
