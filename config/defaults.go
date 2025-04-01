@@ -17,6 +17,8 @@ const (
 	SQliteDns            = "database.sqlite.dns"
 	PostgresDns          = "database.postgres.dns"
 	MySQLDns             = "database.mysql.dns"
+	MongoDBDns           = "database.mongodb.dns"
+	MongoDBName          = "database.mongodb.dbName"
 )
 
 type DBDriver string
@@ -25,4 +27,5 @@ const (
 	SQliteDriver   = "sqlite"
 	PostgresDriver = "postgres"
 	MySQLDriver    = "mysql"
+	MongoDBDriver  = "mongodb"
 )

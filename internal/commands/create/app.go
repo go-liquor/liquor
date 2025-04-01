@@ -57,7 +57,10 @@ var createAppCmd = &cobra.Command{
 					Title: "SQLite",
 					Value: constants.SQLite,
 				},
-				// TODO: MongoDB
+				{
+					Title: "MongoDB",
+					Value: constants.MongoDB,
+				},
 			})
 		}
 
@@ -70,7 +73,8 @@ var createAppCmd = &cobra.Command{
 		adaptersPath := path.Join(appPath, "adapters")
 		databasePath := path.Join(adaptersPath, "database")
 		restPath := path.Join(adaptersPath, "rest")
-		entityPath := path.Join(appPath, "entity")
+		domainPath := path.Join(appPath, "domain")
+		entityPath := path.Join(domainPath, "entity")
 		portsPath := path.Join(appPath, "ports")
 		servicesPath := path.Join(appPath, "services")
 		cmdPath := path.Join(projectPath, "cmd")
@@ -83,6 +87,7 @@ var createAppCmd = &cobra.Command{
 			adaptersPath,
 			databasePath,
 			restPath,
+			domainPath,
 			entityPath,
 			portsPath,
 			servicesPath,
@@ -111,8 +116,10 @@ var createAppCmd = &cobra.Command{
 		}
 
 		if database != "none" {
-			files[path.Join(migrationsPath, "migrations.go")] = boilerplate.Migrations
-			files[path.Join(migrationsPath, time.Now().Format(formatMigration)+"_create_table.go")] = boilerplate.Migrate
+			if database != "mongodb" {
+				files[path.Join(migrationsPath, "migrations.go")] = boilerplate.Migrations
+				files[path.Join(migrationsPath, time.Now().Format(formatMigration)+"_create_table.go")] = boilerplate.Migrate
+			}
 			files[path.Join(portsPath, lqstring.ToSingular(name)+"_repository.go")] = boilerplate.PortsRepository
 			files[path.Join(databasePath, lqstring.ToSingular(name)+"_repository.go")] = boilerplate.Repository
 		}
