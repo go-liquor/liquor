@@ -17,8 +17,11 @@ type MongoFindBase struct {
 }
 
 func (m *MongoFindBase) Where(filter bson.M) FindBase {
+	if m.filter == nil {
+		m.filter = bson.M{}
+	}
 	for name, value := range filter {
-		filter[name] = value
+		m.filter[name] = value
 	}
 	return m
 }

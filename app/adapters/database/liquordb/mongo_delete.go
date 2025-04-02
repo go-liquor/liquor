@@ -15,8 +15,11 @@ type MongoDeleteBase struct {
 }
 
 func (m *MongoDeleteBase) Where(filter bson.M) DeleteBase {
+	if m.filter == nil {
+		m.filter = bson.M{}
+	}
 	for name, value := range filter {
-		filter[name] = value
+		m.filter[name] = value
 	}
 	return m
 }

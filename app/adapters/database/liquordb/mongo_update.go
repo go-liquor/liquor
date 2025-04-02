@@ -22,7 +22,7 @@ func (m *MongoUpdateBase) Where(filter bson.M) UpdateBase {
 		m.filter = bson.M{}
 	}
 	for name, value := range filter {
-		filter[name] = value
+		m.filter[name] = value
 	}
 	return m
 }
