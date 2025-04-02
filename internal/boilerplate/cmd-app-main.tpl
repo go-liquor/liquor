@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/go-liquor/liquor/v2/app"
 	{{- if ne .Database "none" }}
+	{{- if ne .Database "mongodb" }}
 	"{{.Package}}/migrations"
+	{{- end }}
 	"{{.Package}}/app/adapters/database"
 	{{- end }}
 	
