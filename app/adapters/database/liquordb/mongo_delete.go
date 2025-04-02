@@ -22,6 +22,9 @@ func (m *MongoDeleteBase) Where(filter bson.M) DeleteBase {
 }
 
 func (m *MongoDeleteBase) Exec(ctx context.Context) error {
+	if m.err != nil {
+		return m.err
+	}
 	_, err := m.db.Collection(m.collectionName).DeleteMany(ctx, m.filter)
 	return err
 }

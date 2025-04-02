@@ -36,6 +36,9 @@ func (m *MongoUpdateBase) Set(name string, value interface{}) UpdateBase {
 }
 
 func (m *MongoUpdateBase) Exec(ctx context.Context) error {
+	if m.err != nil {
+		return m.err
+	}
 	setters := m.setters
 	if setters == nil {
 		content, err := bson.Marshal(m.collection)
