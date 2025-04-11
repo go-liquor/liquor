@@ -18,5 +18,8 @@ func GetCollectionName(collection any) (string, error) {
 		}
 
 	}
-	return "", fmt.Errorf("collection must be a pointer or a slice")
+	if t.Kind() == reflect.Slice {
+		return lqstring.ToSnakeCase(lqstring.ToPlural(t.Elem().Name())), nil
+	}
+	return "", fmt.Errorf("collection must be a pointer or a slice! Is: %v", t.Kind())
 }

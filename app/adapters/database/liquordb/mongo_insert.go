@@ -18,7 +18,7 @@ type MongoInsertBase struct {
 
 func (i *MongoInsertBase) Exec(ctx context.Context) (any, error) {
 	if i.err != nil {
-		return "", i.err
+		return "", fmt.Errorf("collection error name: %v", i.err)
 	}
 	t := reflect.TypeOf(i.collection)
 	if t.Kind() == reflect.Ptr {
@@ -39,9 +39,12 @@ func (i *MongoInsertBase) Exec(ctx context.Context) (any, error) {
 			}
 			return res.InsertedID, err
 		}
+	}
+
+	if t.Kind() == reflect.Slice {
 		res, err := i.db.Collection(i.collectionName).InsertMany(ctx, i.collection)
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("failed to insert collection: %w", err)
 		}
 		now := time.Now()
 		i.db.Collection(i.collectionName).UpdateMany(ctx, bson.M{"_id": bson.M{"$in": res.InsertedIDs}}, bson.M{"$set": bson.M{
@@ -51,6 +54,5 @@ func (i *MongoInsertBase) Exec(ctx context.Context) (any, error) {
 		return "", nil
 	}
 
-	return "", fmt.Errorf("failed to read as pointer or slice")
-
+	return "", fmt.Errorf("unsupported collection type: %v", t.Kind())
 }
