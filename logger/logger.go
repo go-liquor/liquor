@@ -2,6 +2,7 @@ package logger
 
 import (
 	"log"
+	"os"
 
 	"github.com/go-liquor/liquor/v2/config"
 	"go.uber.org/zap"
@@ -20,7 +21,14 @@ func instanceLogger(configI *config.Config) *zap.Logger {
 	}
 
 	var level zapcore.Level
-	switch configI.GetString(config.LogLevel) {
+
+	cfgLogLevel := configI.GetString(config.LogLevel)
+
+	if os.Getenv("DEBUG") == "on" {
+		cfgLogLevel = "debug"
+	}
+
+	switch cfgLogLevel {
 	case "debug":
 		cfg.DisableCaller = false
 		cfg.DisableStacktrace = false
