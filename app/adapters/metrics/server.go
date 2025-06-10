@@ -10,7 +10,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func newMetricsServer(cfg *config.Config) {
+func newMetricsServer(cfg *config.Config, reg *prometheus.Registry) {
 	port := cfg.GetInt("metrics.port")
 	path := cfg.GetString("metrics.path")
 	if port == 0 {
@@ -29,6 +29,8 @@ func newMetricsServer(cfg *config.Config) {
 		server = gin.New()
 	}
 
-	server.GET(path, ginprom.PromHandler(promhttp.HandlerFor(&prometheus.Registry{}, promhttp.HandlerOpts{})))
+	server.GET(path, ginprom.PromHandler(promhttp.HandlerFor(reg, promhttp.HandlerOpts{
+		Registry: reg,
+	})))
 	go server.Run(fmt.Sprintf("0.0.0.0:%d", port))
 }
