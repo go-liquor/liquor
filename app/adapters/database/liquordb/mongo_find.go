@@ -45,5 +45,8 @@ func (m *MongoFindBase) Scan(ctx context.Context) error {
 	}
 
 	return fmt.Errorf("failed to read as pointer or slice")
+}
 
+func (m *MongoFindBase) Count(ctx context.Context) (int64, error) {
+	return m.db.Collection(m.collectionName).CountDocuments(ctx, m.filter)
 }

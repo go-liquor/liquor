@@ -8,4 +8,5 @@ import (
 type FindBase interface {
 	Where(filter bson.M) FindBase
 	Scan(ctx context.Context) error
+	Count(ctx context.Context) (int64, error)
 }
