@@ -52,5 +52,8 @@ func instanceLogger(configI *config.Config) *zap.Logger {
 	if err != nil {
 		log.Fatalf("failed to build logger: %v", err)
 	}
+	if cfgLogLevel == "debug" {
+		logger.Debug("Debug logger enabled")
+	}
 	return logger
 }
