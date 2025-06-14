@@ -63,7 +63,10 @@ func NewLeaderElection(cfg *config.Config, logger *zap.Logger, run func(ctx cont
 		},
 	}
 
-	leaderelection.RunOrDie(context.Background(), leaderelection.LeaderElectionConfig{
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	leaderelection.RunOrDie(ctx, leaderelection.LeaderElectionConfig{
 		Lock:          lock,
 		LeaseDuration: 15 * time.Second,
 		RenewDeadline: 10 * time.Second,
