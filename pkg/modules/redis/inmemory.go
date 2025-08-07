@@ -246,3 +246,39 @@ func (r *inMemoryRedis) RPop(_ context.Context, key string) (string, error) {
 	}
 	return "", errors.New("list is empty")
 }
+
+func (r *inMemoryRedis) LRange(_ context.Context, key string, start int64, end int64) ([]string, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	list, exists := r.listData[key]
+	if !exists {
+		return []string{}, nil
+	}
+
+	listLen := int64(len(list))
+	if listLen == 0 {
+		return []string{}, nil
+	}
+
+	if start < 0 {
+		start = listLen + start
+	}
+	if end < 0 {
+		end = listLen + end
+	}
+
+	if start < 0 {
+		start = 0
+	}
+	if end >= listLen {
+		end = listLen - 1
+	}
+
+	if start > end {
+		return []string{}, nil
+	}
+
+	result := make([]string, end-start+1)
+	copy(result, list[start:end+1])
+	return result, nil
+}

@@ -24,6 +24,7 @@ type RedisClient interface {
 	LPop(ctx context.Context, key string) (string, error)
 	RPush(ctx context.Context, key string, values ...interface{}) error
 	RPop(ctx context.Context, key string) (string, error)
+	LRange(ctx context.Context, key string, start int64, end int64) ([]string, error)
 }
 
 type redisClient struct {
@@ -230,4 +231,20 @@ func (r *redisClient) RPush(ctx context.Context, key string, values ...interface
 //   - error: nil if successful, error otherwise
 func (r *redisClient) RPop(ctx context.Context, key string) (string, error) {
 	return r.client.RPop(ctx, key).Result()
+}
+
+// LRange  Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on.
+
+// Parameters:
+//   - ctx: Context for the operation
+//   - key: List key
+//   - start: index of start
+//   - end: index of end
+//
+// Returns:
+//   - []string: values
+//   - error: nil if successful, error otherwise
+func (r *redisClient) LRange(ctx context.Context, key string, start int64, end int64) ([]string, error) {
+	values := r.client.LRange(ctx, key, start, end)
+	return values.Result()
 }
