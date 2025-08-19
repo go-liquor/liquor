@@ -3,10 +3,12 @@ package rest
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/gin-contrib/cors"
+	gnzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
-	"github.com/go-liquor/liquor/v2/config"
+	"github.com/go-liquor/liquor/v3/config"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -14,8 +16,17 @@ import (
 func instanceServer(cfg *config.Config) *gin.Engine {
 	var svc *gin.Engine
 	if cfg.GetBool(config.AppDebug) && !cfg.GetBool(config.RestDisabled) {
-		gin.SetMode(gin.DebugMode)
-		svc = gin.Default()
+		gin.SetMode(gin.ReleaseMode)
+		zapCfg := zap.NewProductionConfig()
+		zapCfg.EncoderConfig.TimeKey = ""
+		zapCfg.EncoderConfig.LevelKey = ""
+		zapCfg.EncoderConfig.MessageKey = "uri"
+		zapCfg.EncoderConfig.CallerKey = ""     // remove caller
+		zapCfg.EncoderConfig.StacktraceKey = "" // remove stacktrace
+		l, _ := zapCfg.Build()
+		svc = gin.New()
+		svc.Use(gnzap.RecoveryWithZap(l.Named("lq-server"), false))
+		svc.Use(gnzap.Ginzap(l.Named("lq-server"), time.RFC3339, true))
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 		svc = gin.New()

@@ -5,7 +5,7 @@ import (
 
 	"github.com/chenjiandongx/ginprom"
 	"github.com/gin-gonic/gin"
-	"github.com/go-liquor/liquor/v2/config"
+	"github.com/go-liquor/liquor/v3/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

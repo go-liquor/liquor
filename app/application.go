@@ -1,26 +1,30 @@
 package app
 
 import (
-	"context"
-	"fmt"
+	"os"
 
-	"github.com/go-liquor/liquor/v2/app/adapters/database"
-	"github.com/go-liquor/liquor/v2/app/adapters/rest"
-	"github.com/go-liquor/liquor/v2/config"
-	"github.com/go-liquor/liquor/v2/logger"
-	"github.com/go-liquor/liquor/v2/pkg/lqstring"
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/migrate"
+	"github.com/go-liquor/liquor/v3/app/adapters/database"
+	"github.com/go-liquor/liquor/v3/app/adapters/rest"
+	"github.com/go-liquor/liquor/v3/config"
+	"github.com/go-liquor/liquor/v3/logger"
+	"github.com/go-liquor/liquor/v3/pkg/lqstring"
 	"go.uber.org/fx"
+	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 const (
-	groupTagApiRest      = "liquor-restApis"
-	groupTagRepositories = "liquor-repositories"
+	groupTagApiRest = "lq-restApis"
 )
 
 type Option = fx.Option
+
+// Register register a new provider
+var Register = fx.Provide
+
+// Call invoke a function
+var Call = fx.Invoke
 
 // WithRestApi registers a REST API implementation with the application.
 // It wraps the provided function as a REST API provider and adds it to the "restApis" group
@@ -87,37 +91,28 @@ func WithService(svc any) Option {
 //	)
 func WithRepository(repo any) Option {
 	unique := lqstring.RandomString(6)
-	return fx.Module("liquor-repository-"+unique, fx.Provide(
+	return fx.Module("lq-repo-"+unique, fx.Provide(
 		repo))
 }
 
-func WithMigrations(migrations ...any) Option {
-	migrations = append(migrations, func(db *bun.DB, migrations *migrate.Migrations, logger *zap.Logger) error {
-		migrator := migrate.NewMigrator(db,
-			migrations,
-			migrate.WithTableName(database.MigrationsTableName),
-			migrate.WithLocksTableName(database.MigrationsLocksTableName))
-		if err := database.Init(context.TODO(), db); err != nil {
-			return fmt.Errorf("failed to init migrate:%w", err)
-		}
-		group, err := migrator.Migrate(context.TODO())
+// nologger print fx events when debug is enabled
+func nologger(cfg *config.Config) fxevent.Logger {
+	if cfg.GetBool("app.debug") || os.Getenv("DEBUG") == "on" {
+		zapCfg := zap.NewProductionConfig()
+		zapCfg.EncoderConfig.TimeKey = ""
+		zapCfg.EncoderConfig.LevelKey = ""
+		zapCfg.EncoderConfig.MessageKey = "msg"
+		zapCfg.EncoderConfig.CallerKey = ""     // remove caller
+		zapCfg.EncoderConfig.StacktraceKey = "" // remove stacktrace
+		zapCfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+		l, err := zapCfg.Build()
 		if err != nil {
-			return fmt.Errorf("failed to migrate: %w", err)
+			panic(err)
 		}
-		if group.ID == 0 {
-			logger.Info("there are no new migrations to run")
-			return nil
-		}
-		logger.Info(fmt.Sprintf("migrated to %s", group))
-		return nil
-	})
-	return fx.Module("liquor-migrations",
-		fx.Provide(func() *migrate.Migrations {
-			return migrate.NewMigrations()
-		}),
-		fx.Invoke(
-			migrations...,
-		))
+
+		return &fxevent.ZapLogger{Logger: l}
+	}
+	return fxevent.NopLogger
 }
 
 // New creates and runs a new application instance using uber-fx dependency injection.
@@ -136,6 +131,7 @@ func WithMigrations(migrations ...any) Option {
 //   - Start all provided services
 func New(options ...Option) {
 	opts := []fx.Option{
+		fx.WithLogger(nologger),
 		config.ConfigModule,
 		logger.LoggerModule,
 		rest.RestModule,
@@ -156,9 +152,7 @@ func New(options ...Option) {
 			fx.Annotate(func(routes []rest.Api) []rest.Api { return routes }, fx.ParamTags(`group:"`+groupTagApiRest+`"`)),
 		),
 	}
-	for _, option := range options {
-		opts = append(opts, option)
-	}
+	opts = append(opts, options...)
 
 	app := fx.New(
 		opts...,

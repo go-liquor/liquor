@@ -6,7 +6,7 @@ import (
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
-	"github.com/go-liquor/liquor/v2/config"
+	"github.com/go-liquor/liquor/v3/config"
 	"google.golang.org/api/option"
 )
 

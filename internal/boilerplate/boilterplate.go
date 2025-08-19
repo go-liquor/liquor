@@ -1,44 +1,21 @@
 package boilerplate
 
 import (
+	"embed"
 	_ "embed"
 )
 
-//go:embed cmd-app-main.tpl
-var CmdAppMainGo string
+//go:embed project/*
+var ProjectFiles embed.FS
 
-//go:embed go-mod.tpl
-var GoMod string
+//go:embed domain.go.tpl
+var DomainFile string
 
-//go:embed config.yaml.tpl
-var ConfigExampleYaml string
+//go:embed model.go.tpl
+var ModelFile string
 
-//go:embed gitignore.tpl
-var GitIgnore string
+//go:embed usecase.go.tpl
+var UsecaseFile string
 
-//go:embed migrations.go.tpl
-var Migrations string
-
-//go:embed api.tpl
-var Api string
-
-//go:embed ports-service.tpl
-var PortsService string
-
-//go:embed service.tpl
-var Service string
-
-//go:embed entity.tpl
-var Entity string
-
-//go:embed ports-repository.tpl
-var PortsRepository string
-
-//go:embed repository.tpl
-var Repository string
-
-//go:embed migrate.tpl
-var Migrate string
-
-//go:embed ports.tpl
-var Ports string
+//go:embed usecase_port.go.tpl
+var UsecasePortFile string

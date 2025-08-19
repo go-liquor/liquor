@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"os"
 
-	"github.com/go-liquor/liquor/v2/internal/stdout"
+	"github.com/go-liquor/liquor/v3/internal/stdout"
 )
 
 // ParseTemplate processes a given template string and writes the output to a specified file.

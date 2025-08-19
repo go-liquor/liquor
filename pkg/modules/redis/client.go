@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-liquor/liquor/v2/config"
+	"github.com/go-liquor/liquor/v3/config"
 	goredis "github.com/redis/go-redis/v9"
 )
 

@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/go-liquor/liquor/v2/internal/commands/create"
+	"github.com/go-liquor/liquor/v3/internal/commands/create"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +12,7 @@ var LiquorRootCmd = &cobra.Command{
 
 func Execute() error {
 	LiquorRootCmd.AddCommand(
-		create.CreateCmd,
+		create.CreateCmd(),
 	)
 	if err := LiquorRootCmd.Execute(); err != nil {
 		return err

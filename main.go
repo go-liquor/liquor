@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-liquor/liquor/v2/internal/commands"
+	"github.com/go-liquor/liquor/v3/internal/commands"
 	"github.com/logrusorgru/aurora/v4"
 )
 

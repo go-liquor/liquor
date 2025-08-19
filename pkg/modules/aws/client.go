@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
-	"github.com/go-liquor/liquor/v2/config"
+	"github.com/go-liquor/liquor/v3/config"
 	"go.uber.org/zap"
 )
 

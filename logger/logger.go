@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-liquor/liquor/v2/config"
+	"github.com/go-liquor/liquor/v3/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

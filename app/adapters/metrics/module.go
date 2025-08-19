@@ -20,7 +20,7 @@ import (
 //   - Sets up an HTTP server to expose metrics
 //   - Uses "liquor-adapter-metrics" as the module identifier
 func EnableMetrics(collector ...prometheus.Collector) fx.Option {
-	return fx.Module("liquor-adapter-metrics",
+	return fx.Module("lq-adapter-metrics",
 		fx.Provide(func() *prometheus.Registry {
 			reg := prometheus.NewRegistry()
 			for _, v := range collector {

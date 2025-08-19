@@ -82,3 +82,7 @@ func (c *Config) GetBool(key string) bool {
 func (c *Config) GetFloat64(key string) float64 {
 	return c.stg.GetFloat64(key)
 }
+
+func (c *Config) GetStringMap(key string) map[string]interface{} {
+	return c.stg.GetStringMap(key)
+}

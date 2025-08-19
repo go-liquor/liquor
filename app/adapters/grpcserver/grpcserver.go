@@ -3,8 +3,9 @@ package grpcserver
 import (
 	"context"
 	"fmt"
-	"github.com/go-liquor/liquor/v2/config"
 	"net"
+
+	"github.com/go-liquor/liquor/v3/config"
 
 	"go.uber.org/fx"
 	"go.uber.org/zap"

@@ -5,7 +5,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/go-liquor/liquor/v2/internal/stdout"
+	"github.com/go-liquor/liquor/v3/internal/stdout"
 	"golang.org/x/mod/modfile"
 )
 

@@ -3,7 +3,12 @@ package leader
 import (
 	"context"
 	"fmt"
-	"github.com/go-liquor/liquor/v2/config"
+	"os"
+	"path"
+	"strings"
+	"time"
+
+	"github.com/go-liquor/liquor/v3/config"
 	"go.uber.org/zap"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -11,10 +16,6 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/tools/leaderelection"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
-	"os"
-	"path"
-	"strings"
-	"time"
 )
 
 func getNamespace() string {
