@@ -30,6 +30,7 @@ liquor create project --name <APP_NAME> --module <PACKAGE_NAME>
 ```
 
 When you create a new project, it will follow the structure below:
+
 ![Structure](resources/folder.png)
 
 - `cmd/app`: Contains the application’s entry point, including the main.go file and dependency injection setup.
