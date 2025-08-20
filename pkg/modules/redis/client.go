@@ -39,13 +39,16 @@ type redisClient struct {
 // Returns:
 //   - RedisClient: Interface for Redis operations
 func NewRedisClient(cfg *config.Config) RedisClient {
-	clt := goredis.NewClient(&goredis.Options{
-		Addr:     cfg.GetString("redis.addr"),
-		Password: cfg.GetString("redis.password"),
-	})
-	return &redisClient{
-		client: clt,
+	if cfg.GetString("redis.addr") != "" {
+		clt := goredis.NewClient(&goredis.Options{
+			Addr:     cfg.GetString("redis.addr"),
+			Password: cfg.GetString("redis.password"),
+		})
+		return &redisClient{
+			client: clt,
+		}
 	}
+	return &redisClient{}
 }
 
 // Set stores a key-value pair with optional expiration.

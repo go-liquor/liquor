@@ -13,8 +13,7 @@ import (
 
 func createUseCase() *cobra.Command {
 	var (
-		name     string
-		rootPath string
+		name string
 	)
 	cm := &cobra.Command{
 		Use:     "usecase",
@@ -25,23 +24,23 @@ func createUseCase() *cobra.Command {
 				name = args[0]
 			}
 
-			module, err := gomod.GetModFile(rootPath)
+			modulePath, err := gomod.GetModPath(rootPath)
 			if err != nil {
 				return err
 			}
 			useCaseName := lqstring.ToPascalCase(name)
 
 			values := map[string]string{
-				"module":      module.Module.Mod.Path,
+				"module":      modulePath,
 				"useCaseName": useCaseName,
 			}
 
-			appDst := path.Join(rootPath, "internal/application", lqstring.ToSnakeCase(name)+"_usecase.go")
+			appDst := path.Join(rootPath, "internal", "application", lqstring.ToSnakeCase(name)+"_usecase.go")
 			if err := templates.ParseTemplate(boilerplate.UsecaseFile, appDst, values); err != nil {
 				return err
 			}
 			stdout.Success("created %s", appDst)
-			portDst := path.Join(rootPath, "internal/ports", lqstring.ToSnakeCase(name)+"_usecase.go")
+			portDst := path.Join(rootPath, "internal", "ports", lqstring.ToSnakeCase(name)+"_usecase.go")
 			if err := templates.ParseTemplate(boilerplate.UsecasePortFile, portDst, values); err != nil {
 				return err
 			}
@@ -50,6 +49,6 @@ func createUseCase() *cobra.Command {
 		},
 	}
 	cm.Flags().StringVarP(&name, "name", "n", "", "Usecase name")
-	cm.Flags().StringVarP(&rootPath, "root", "r", ".", "Root path")
+
 	return cm
 }

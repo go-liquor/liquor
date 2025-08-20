@@ -19,3 +19,12 @@ var UsecaseFile string
 
 //go:embed usecase_port.go.tpl
 var UsecasePortFile string
+
+//go:embed repository_port.go.tpl
+var RepositoryPortFile string
+
+//go:embed repository/*.tpl
+var RepositoryImplFiles embed.FS
+
+//go:embed rest.go.tpl
+var RestApiFile string

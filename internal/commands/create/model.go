@@ -12,8 +12,7 @@ import (
 
 func createModel() *cobra.Command {
 	var (
-		name     string
-		rootPath string
+		name string
 	)
 	cm := &cobra.Command{
 		Use:   "model",
@@ -22,19 +21,22 @@ func createModel() *cobra.Command {
 			if len(args) > 0 {
 				name = args[0]
 			}
-			dst := path.Join(rootPath, "internal/adapters/db", lqstring.ToSnakeCase(name)+".go")
-
-			modelName := lqstring.ToPascalCase(name)
-			if err := templates.ParseTemplate(boilerplate.ModelFile, dst, map[string]string{
-				"modelName": modelName,
-			}); err != nil {
-				return err
-			}
-			stdout.Success("created %s", dst)
-			return nil
+			return createModelRun(name)
 		},
 	}
 	cm.Flags().StringVarP(&name, "name", "n", "", "Model name")
-	cm.Flags().StringVarP(&rootPath, "root", "r", ".", "Root path")
 	return cm
+}
+
+func createModelRun(name string) error {
+	dst := path.Join(rootPath, "internal", "adapters", "db", lqstring.ToSnakeCase(name)+"_model.go")
+
+	modelName := lqstring.ToPascalCase(name)
+	if err := templates.ParseTemplate(boilerplate.ModelFile, dst, map[string]string{
+		"modelName": modelName,
+	}); err != nil {
+		return err
+	}
+	stdout.Success("created %s", dst)
+	return nil
 }

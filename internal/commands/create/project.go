@@ -57,7 +57,7 @@ func createProjectCmd() *cobra.Command {
 			dirs := []string{
 				"project",
 			}
-			dstRoot := projectName
+			dstRoot := path.Join(rootPath, projectName)
 
 			for i := 0; i < len(dirs); i++ {
 				root := dirs[i]
@@ -93,6 +93,9 @@ func createProjectCmd() *cobra.Command {
 				}
 			}
 
+			if err := execcm.Command(dstRoot, "go", "get", "github.com/go-liquor/liquor/v3@latest"); err != nil {
+				return err
+			}
 			if err := execcm.Command(dstRoot, "go", "mod", "tidy"); err != nil {
 				return err
 			}

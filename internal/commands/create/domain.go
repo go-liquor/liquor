@@ -12,8 +12,7 @@ import (
 
 func createDomain() *cobra.Command {
 	var (
-		name     string
-		rootPath string
+		name string
 	)
 	cm := &cobra.Command{
 		Use:   "domain",
@@ -22,7 +21,7 @@ func createDomain() *cobra.Command {
 			if len(args) > 0 {
 				name = args[0]
 			}
-			dst := path.Join(rootPath, "internal/domain", lqstring.ToSnakeCase(name)+".go")
+			dst := path.Join(rootPath, "internal", "domain", lqstring.ToSnakeCase(name)+".go")
 
 			domainName := lqstring.ToPascalCase(name)
 			if err := templates.ParseTemplate(boilerplate.DomainFile, dst, map[string]string{
@@ -35,6 +34,5 @@ func createDomain() *cobra.Command {
 		},
 	}
 	cm.Flags().StringVarP(&name, "name", "n", "", "Domain name")
-	cm.Flags().StringVarP(&rootPath, "root", "r", ".", "Root path")
 	return cm
 }

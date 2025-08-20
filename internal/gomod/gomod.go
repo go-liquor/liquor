@@ -70,3 +70,12 @@ func GetModFile(origin string) (*modfile.File, error) {
 	modFile, err := modfile.Parse("go.mod", content, nil)
 	return modFile, err
 }
+
+// GetModPath return the module path
+func GetModPath(origin string) (string, error) {
+	mod, err := GetModFile(origin)
+	if err != nil {
+		return "", err
+	}
+	return mod.Module.Mod.Path, nil
+}

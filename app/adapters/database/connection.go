@@ -15,15 +15,18 @@ import (
 	"go.uber.org/zap"
 )
 
-type driver string
-
 const (
-	MongoDB  driver = "mongodb"
-	ORM      driver = "orm"
-	MySQL    driver = "mysql"
-	Postgres driver = "postgres"
-	SQLITE   driver = "sqlite"
+	MongoDB  string = "mongodb"
+	ORM      string = "orm"
+	MySQL    string = "mysql"
+	Postgres string = "postgres"
+	SQLITE   string = "sqlite"
 )
+
+var Drivers map[string]struct{} = map[string]struct{}{
+	MongoDB: {},
+	ORM:     {},
+}
 
 type ConnectionOutput struct {
 	fx.Out
@@ -37,8 +40,8 @@ func NewConnection(cfg *config.Config, logger *zap.Logger) (ConnectionOutput, er
 	var err error
 	result := ConnectionOutput{}
 
-	for driverValue, _ := range cfg.GetStringMap(config.Database) {
-		if driverValue == string(MongoDB) {
+	for driverValue := range cfg.GetStringMap(config.Database) {
+		if driverValue == MongoDB {
 			logger.Info("creating connection with mongodb")
 			client, err := mongo.Connect(options.Client().SetConnectTimeout(time.Second * 30).ApplyURI(cfg.GetString(config.DatabaseMongoDBUri)))
 			if err != nil {
@@ -48,13 +51,13 @@ func NewConnection(cfg *config.Config, logger *zap.Logger) (ConnectionOutput, er
 			db := client.Database(cfg.GetString(config.DatabaseMongoDBDBName))
 			result.MongoDB = db
 		}
-		if driverValue == string(ORM) {
+		if driverValue == ORM {
 			switch cfg.GetString(config.DatabaseORMDriver) {
-			case string(SQLITE):
+			case SQLITE:
 				sqldb, err = sql.Open(sqliteshim.ShimName, cfg.GetString(config.DatabaseORMDNS))
-			case string(MySQL):
+			case MySQL:
 				sqldb, err = sql.Open("mysql", cfg.GetString(config.DatabaseORMDNS))
-			case string(Postgres):
+			case Postgres:
 				sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(cfg.GetString(config.DatabaseORMDNS))))
 			}
 			if err != nil {
