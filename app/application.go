@@ -8,6 +8,7 @@ import (
 	"github.com/go-liquor/liquor/v3/config"
 	"github.com/go-liquor/liquor/v3/logger"
 	"github.com/go-liquor/liquor/v3/pkg/lqstring"
+	"github.com/go-liquor/liquor/v3/pkg/modules/firebase"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
@@ -136,6 +137,7 @@ func New(options ...Option) {
 		logger.LoggerModule,
 		rest.RestModule,
 		database.Module,
+		firebase.FirebaseModule,
 		fx.Invoke(
 			func(l *zap.Logger, cfg *config.Config) {
 				l.Debug("Starting application " + cfg.GetString(config.AppName))

@@ -9,6 +9,8 @@ import (
 
 	"github.com/charmbracelet/huh"
 	"github.com/go-liquor/liquor/v3/internal/boilerplate"
+	"github.com/go-liquor/liquor/v3/internal/execcm"
+	"github.com/go-liquor/liquor/v3/internal/stdout"
 	"github.com/go-liquor/liquor/v3/internal/templates"
 	"github.com/spf13/cobra"
 )
@@ -91,6 +93,11 @@ func createProjectCmd() *cobra.Command {
 				}
 			}
 
+			if err := execcm.Command(dstRoot, "go", "mod", "tidy"); err != nil {
+				return err
+			}
+
+			stdout.Success("created project %v", projectName)
 			return nil
 		},
 	}

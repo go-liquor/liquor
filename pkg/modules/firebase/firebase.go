@@ -23,8 +23,11 @@ import (
 //
 //	app, err := firebase.NewApp(config)
 func NewApp(cfg *config.Config) (*firebase.App, error) {
-	opt := option.WithCredentialsFile(cfg.GetString("firebase.configFile"))
-	return firebase.NewApp(context.Background(), nil, opt)
+	if cfg.GetString("firebase.configFile") != "" {
+		opt := option.WithCredentialsFile(cfg.GetString("firebase.configFile"))
+		return firebase.NewApp(context.Background(), nil, opt)
+	}
+	return nil, nil
 }
 
 // NewAuth creates a new Firebase Auth client from the Firebase App instance.
