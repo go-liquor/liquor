@@ -117,6 +117,19 @@ func nologger(cfg *config.Config) fxevent.Logger {
 	return fxevent.NopLogger
 }
 
+func defaultOpts(options ...fx.Option) []fx.Option {
+	opts := []fx.Option{
+		fx.WithLogger(nologger),
+		config.ConfigModule,
+		logger.LoggerModule,
+		database.Module,
+		firebase.FirebaseModule,
+		redis.RedisModule,
+	}
+	opts = append(opts, options...)
+	return opts
+}
+
 // New creates and runs a new application instance using uber-fx dependency injection.
 // It initializes the application with default modules (config, logger, and REST)
 // and accepts additional options for customization.
@@ -132,14 +145,9 @@ func nologger(cfg *config.Config) fxevent.Logger {
 //   - Register all REST APIs
 //   - Start all provided services
 func New(options ...Option) {
-	opts := []fx.Option{
-		fx.WithLogger(nologger),
-		config.ConfigModule,
-		logger.LoggerModule,
+	opts := defaultOpts(options...)
+	opts = append(opts,
 		rest.RestModule,
-		database.Module,
-		firebase.FirebaseModule,
-		redis.RedisModule,
 		fx.Invoke(
 			func(l *zap.Logger, cfg *config.Config) {
 				l.Debug("Starting application " + cfg.GetString(config.AppName))
@@ -151,13 +159,31 @@ func New(options ...Option) {
 				}
 			},
 		),
-		// create a slice of rest apis
 		fx.Provide(
 			fx.Annotate(func(routes []rest.Api) []rest.Api { return routes }, fx.ParamTags(`group:"`+groupTagApiRest+`"`)),
 		),
-	}
-	opts = append(opts, options...)
+	)
+	app := fx.New(
+		opts...,
+	)
+	app.Run()
+}
 
+// NewRunWithoutRestApi creates and runs a new application instance using uber-fx dependency injection.
+// It initializes the application with default modules (config, logger, and database)
+// and accepts additional options for customization.
+//
+// Parameters:
+//   - options: variadic Option parameters that allow extending the application
+//     with additional modules, providers, or invocations.
+//
+// The application will:
+//   - Set up configuration management
+//   - Initialize logging
+//   - Configure database connection
+//   - Start all provided services
+func NewRunWithoutRestApi(options ...Option) {
+	opts := defaultOpts(options...)
 	app := fx.New(
 		opts...,
 	)
