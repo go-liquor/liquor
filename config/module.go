@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
@@ -32,6 +33,7 @@ func readConfigFile() (*Config, error) {
 
 	vp.AutomaticEnv()
 	vp.SetConfigFile(file)
+	vp.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	if err := vp.ReadInConfig(); err != nil {
 		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}

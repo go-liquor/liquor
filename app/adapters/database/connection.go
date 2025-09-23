@@ -40,32 +40,32 @@ func NewConnection(cfg *config.Config, logger *zap.Logger) (ConnectionOutput, er
 	var err error
 	result := ConnectionOutput{}
 
-	for driverValue := range cfg.GetStringMap(config.Database) {
-		if driverValue == MongoDB {
-			logger.Info("creating connection with mongodb")
-			client, err := mongo.Connect(options.Client().SetConnectTimeout(time.Second * 30).ApplyURI(cfg.GetString(config.DatabaseMongoDBUri)))
-			if err != nil {
-				logger.Fatal("Failed to connect to mongodb database", zap.Error(err))
-				return result, err
-			}
-			db := client.Database(cfg.GetString(config.DatabaseMongoDBDBName))
-			result.MongoDB = db
+	if value := cfg.GetString(config.DatabaseMongoDBUri); value != "" {
+		logger.Info("creating connection with mongodb")
+		client, err := mongo.Connect(options.Client().SetConnectTimeout(time.Second * 30).ApplyURI(cfg.GetString(config.DatabaseMongoDBUri)))
+		if err != nil {
+			logger.Fatal("Failed to connect to mongodb database", zap.Error(err))
+			return result, err
 		}
-		if driverValue == ORM {
-			switch cfg.GetString(config.DatabaseORMDriver) {
-			case SQLITE:
-				sqldb, err = sql.Open(sqliteshim.ShimName, cfg.GetString(config.DatabaseORMDNS))
-			case MySQL:
-				sqldb, err = sql.Open("mysql", cfg.GetString(config.DatabaseORMDNS))
-			case Postgres:
-				sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(cfg.GetString(config.DatabaseORMDNS))))
-			}
-			if err != nil {
-				return result, err
-			}
-			db := bun.NewDB(sqldb, sqlitedialect.New())
-			result.ORM = db
-		}
+		db := client.Database(cfg.GetString(config.DatabaseMongoDBDBName))
+		result.MongoDB = db
 	}
+
+	if value := cfg.GetString(config.DatabaseORMDriver); value != "" {
+		switch cfg.GetString(config.DatabaseORMDriver) {
+		case SQLITE:
+			sqldb, err = sql.Open(sqliteshim.ShimName, cfg.GetString(config.DatabaseORMDNS))
+		case MySQL:
+			sqldb, err = sql.Open("mysql", cfg.GetString(config.DatabaseORMDNS))
+		case Postgres:
+			sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(cfg.GetString(config.DatabaseORMDNS))))
+		}
+		if err != nil {
+			return result, err
+		}
+		db := bun.NewDB(sqldb, sqlitedialect.New())
+		result.ORM = db
+	}
+
 	return result, nil
 }
