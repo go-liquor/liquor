@@ -10,6 +10,7 @@ import (
 	"github.com/go-liquor/liquor/v3/pkg/lqstring"
 	"github.com/go-liquor/liquor/v3/pkg/modules/firebase"
 	"github.com/go-liquor/liquor/v3/pkg/modules/redis"
+	"github.com/joho/godotenv"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
@@ -117,9 +118,19 @@ func nologger(cfg *config.Config) fxevent.Logger {
 	return fxevent.NopLogger
 }
 
+func loadEnv(logger *zap.Logger) {
+	err := godotenv.Load()
+	if err != nil {
+		logger.Warn(".env not loaded", zap.Error(err))
+		return
+	}
+	logger.Info(".env loaded")
+}
+
 func defaultOpts(options ...fx.Option) []fx.Option {
 	opts := []fx.Option{
 		fx.WithLogger(nologger),
+		Call(loadEnv),
 		config.ConfigModule,
 		logger.LoggerModule,
 		database.Module,

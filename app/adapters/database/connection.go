@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"os"
 	"time"
 
 	"github.com/go-liquor/liquor/v3/config"
@@ -23,6 +24,16 @@ const (
 	SQLITE   string = "sqlite"
 )
 
+const (
+	EnvMongoDBEnabled  = "LIQUOR_DB_MONGODB_ENABLED"
+	EnvMongoDBURI      = "LIQUOR_DB_MONGODB_URI"
+	EnvMongoDBDatabase = "LIQUOR_DB_MONGODB_DATABASE"
+
+	EnvORMEnabled = "LIQUOR_DB_ORM_ENABLED"
+	EnvORMDriver  = "LIQUOR_DB_ORM_DRIVER"
+	EnvORMDNS     = "LIQUOR_DB_ORM_DNS"
+)
+
 var Drivers map[string]struct{} = map[string]struct{}{
 	MongoDB: {},
 	ORM:     {},
@@ -37,28 +48,29 @@ type ConnectionOutput struct {
 // NewConnection creates a new database connection using the Bun ORM OR Mongodb.
 func NewConnection(cfg *config.Config, logger *zap.Logger) (ConnectionOutput, error) {
 	var sqldb *sql.DB
-	var err error
 	result := ConnectionOutput{}
 
-	if value := cfg.GetString(config.DatabaseMongoDBUri); value != "" {
+	if os.Getenv(EnvMongoDBEnabled) == "true" {
 		logger.Info("creating connection with mongodb")
-		client, err := mongo.Connect(options.Client().SetConnectTimeout(time.Second * 30).ApplyURI(cfg.GetString(config.DatabaseMongoDBUri)))
+		client, err := mongo.Connect(options.Client().SetConnectTimeout(time.Second * 30).ApplyURI(os.Getenv(EnvMongoDBURI)))
 		if err != nil {
 			logger.Fatal("Failed to connect to mongodb database", zap.Error(err))
 			return result, err
 		}
-		db := client.Database(cfg.GetString(config.DatabaseMongoDBDBName))
+		db := client.Database(os.Getenv(EnvMongoDBDatabase))
 		result.MongoDB = db
 	}
 
-	if value := cfg.GetString(config.DatabaseORMDriver); value != "" {
-		switch cfg.GetString(config.DatabaseORMDriver) {
+	if os.Getenv(EnvORMEnabled) == "true" {
+		dns := os.Getenv(EnvORMDNS)
+		var err error
+		switch os.Getenv(EnvORMDriver) {
 		case SQLITE:
-			sqldb, err = sql.Open(sqliteshim.ShimName, cfg.GetString(config.DatabaseORMDNS))
+			sqldb, err = sql.Open(sqliteshim.ShimName, dns)
 		case MySQL:
-			sqldb, err = sql.Open("mysql", cfg.GetString(config.DatabaseORMDNS))
+			sqldb, err = sql.Open("mysql", dns)
 		case Postgres:
-			sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(cfg.GetString(config.DatabaseORMDNS))))
+			sqldb = sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dns)))
 		}
 		if err != nil {
 			return result, err

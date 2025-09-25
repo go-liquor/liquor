@@ -14,6 +14,8 @@ Liquor is a web development framework built with Golang, designed to simplify th
 - Modules
     - [firebase](#firebase)
     - [redis](#redis)
+- [database](#database)
+
 
 ## Install CLI
 
@@ -42,6 +44,7 @@ When you create a new project, it will follow the structure below:
 - `ports`: Defines the application interfaces.
 - `config.example.yaml`: Example configuration file for reference.
 - `config.yaml`: Project configuration file (should not be committed to Git).
+- `.env`: Secrets and sensitive data
 
 
 ### Create a usecase
@@ -235,3 +238,24 @@ redis:
     addr: localhost:6379
     passsword: "" # set this if have password
 ```
+
+## database
+
+To connect to the database, use the .env file or environment variables. Liquor supports MongoDB and ORM (sqlite, mysql, postgres)
+
+
+To enable mongodb use the following variables
+
+| Variable | Description |
+|----------|-------------|
+| `LIQUOR_DB_MONGODB_ENABLED` | Enables connection to mongodb |
+| `LIQUOR_DB_MONGODB_URI` | Connection URI |
+| `LIQUOR_DB_MONGODB_DATABASE` | Database name |
+
+To enable ORM use the following variables
+
+| Variable | Description |
+|----------|-------------|
+| `LIQUOR_DB_ORM_ENABLED` | Enables connection to ORM |
+| `LIQUOR_DB_ORM_DRIVER` | Choose the driver you want to use: `sqlite` `postgres` `mysql`  |
+| `LIQUOR_DB_ORM_DNS` | DNS to connect (use examples on https://bun.uptrace.dev/guide/golang-orm.html#quick-start) |

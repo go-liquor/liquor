@@ -24,4 +24,3 @@ rest:
       - "Authorization"
       - "Content-Type"
     credentials: true
-database: {}
